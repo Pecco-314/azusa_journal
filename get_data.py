@@ -44,9 +44,15 @@ async def crawler(aid):
             proxy = {"https": get_proxy()}
 
     print(f"已完成{len(result_map)}/{len(aids)}")
+    if len(result_map) % 100 == 0:
+        with open(f"log/{sys.argv[1]}.txt", "a") as fp:
+            fp.write(f"[{datetime.datetime.now():%Y-%m-%d %H:%M:%S}] {len(result_map)}/{len(aids)}\n")
+            fp.flush()
     
 
 if __name__ == '__main__':
+    with open(f"log/{sys.argv[1]}.txt", "w"):
+        pass
     start = datetime.datetime.now()
     with open("videos.json") as fp:
         aids = json.load(fp)['list']
