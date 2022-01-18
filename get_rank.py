@@ -61,7 +61,7 @@ for video in this_videos:
     last_rank = None if last_video is None else last_video.get('rank')
     print(f"""第{rk}名（{get_change(last_rank, rk)}）：{data['title']}（av{video['aid']}）
     作者：{data['owner']['name']}
-    点数：{video['point']}
+    点数：{video['point']:.0f}
     播放量：{video['view']}
     硬币：{video['coin']}
     收藏：{video['favorite']}
