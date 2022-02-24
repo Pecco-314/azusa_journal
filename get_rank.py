@@ -32,9 +32,9 @@ def get_video_list(map):
 
 this_videos = get_video_list(this)
 last_videos = get_video_list(last)
-for video in last_videos:
-    if video.get('rank') is not None:
-        this_videos['rank'] = '-'
+for aid, video in last.items():
+    if video.get('rank') is not None and this.get(aid) is not None:
+        this[aid]['rank'] = '-'
 
 def get_change(last, this):
     if last is None:
