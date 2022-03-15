@@ -15,6 +15,7 @@ last = {}
 if len(sys.argv) >= 3:
     last = json.load(open(f"data/{sys.argv[2]}.json"))
 exclusive = json.load(open("exclusive.json"))
+placeholder = json.load(open("placeholder.json"))
 
 def get_video_list(map):
     videos = []
@@ -52,13 +53,16 @@ rk = 0
 for video in this_videos:
     if video['aid'] in exclusive:
         continue
+    rk += 1
+    last_video = last.get(video['aid'])
+    last_rank = None if last_video is None else last_video.get('rank')
+    this[video['aid']]['rank'] = rk
+    if video['aid'] in placeholder:
+        print(f"第{rk}名（{get_change(last_rank, rk)}）：已失效视频（av{video['aid']}）\n")
     obj = requests.get(URL.format(video['aid'])).json()
     if obj['code'] != 0:
         continue
-    rk += 1
     data = obj['data']
-    last_video = last.get(video['aid'])
-    last_rank = None if last_video is None else last_video.get('rank')
     print(f"""第{rk}名（{get_change(last_rank, rk)}）：{data['title']}（av{video['aid']}）
     作者：{data['owner']['name']}
     点数：{video['point']:.0f}
@@ -67,7 +71,6 @@ for video in this_videos:
     收藏：{video['favorite']}
     点赞：{video['like']}
     """)
-    this[video['aid']]['rank'] = rk
     if rk == 25:
         break
 
